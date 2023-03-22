@@ -41,11 +41,18 @@ class LocalPairingRepository @Inject constructor(@ApplicationContext val appCont
         datasetSize = pairingsList.size
     }
 
-    fun getRandomCorrectPairing(): Pairing {
+    fun getPairing(correct: Boolean): Pairing {
+        return when (correct) {
+            true -> getRandomCorrectPairing()
+            false -> getRandomIncorrectPairing()
+        }
+    }
+
+    private fun getRandomCorrectPairing(): Pairing {
         return dataset[randomIndex()]
     }
 
-    fun getRandomIncorrectPairing(): Pairing {
+    private fun getRandomIncorrectPairing(): Pairing {
         val firstIndex = randomIndex()
         var secondIndex = firstIndex
         while (secondIndex == firstIndex) {

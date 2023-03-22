@@ -3,4 +3,8 @@
 
     <string name="app_pairings_assets_not_found">Could not find local pairings file, exiting</string>
     <string name="app_pairings_assets_illegal_format">Could not properly parse local pairings file, exiting</string>
+
+    <string name="ui_buttons_next_pairing">Next</string>
+    <string name="ui_buttons_pairing_correct">Correct</string>
+    <string name="ui_buttons_pairing_incorrect">Wrong</string>
 </resources>
