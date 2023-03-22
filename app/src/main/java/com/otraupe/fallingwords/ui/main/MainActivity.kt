@@ -1,4 +1,4 @@
-package com.otraupe.fallingwords
+package com.otraupe.fallingwords.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    MainComposable()
                 }
             }
         }
@@ -30,14 +30,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+fun MainComposable() {
+    
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     FallingWordsTheme {
-        Greeting("Android")
+        MainComposable()
     }
 }
