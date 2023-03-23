@@ -4,7 +4,15 @@
     <string name="app_pairings_assets_not_found">Could not find local pairings file, exiting</string>
     <string name="app_pairings_assets_illegal_format">Could not properly parse local pairings file, exiting</string>
 
-    <string name="ui_buttons_next_pairing">Next</string>
-    <string name="ui_buttons_pairing_correct">Correct</string>
-    <string name="ui_buttons_pairing_incorrect">Wrong</string>
+    <string name="ui_instructions_title">Instructions</string>
+    <string name="ui_instructions_body">Swipe the falling word to the left (correct translation) or to the right (incorrect translation).\n\nPress \"%1$s\" to begin.</string>
+    <string name="ui_instructions_ok">OK</string>
+
+    <string name="ui_buttons_next_pairing">Next Word</string>
+
+    <string name="ui_answer_correct">Correct</string>
+    <string name="ui_answer_incorrect">Wrong</string>
+
+    <string name="ui_cd_response_left">Swipe left for wrong</string>
+    <string name="ui_cd_response_right">Swipe right for correct</string>
 </resources>
