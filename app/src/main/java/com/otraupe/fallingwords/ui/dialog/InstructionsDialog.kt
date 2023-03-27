@@ -1,8 +1,8 @@
-package com.otraupe.fallingwords.ui.main
+package com.otraupe.fallingwords.ui.dialog
 
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.otraupe.fallingwords.R
@@ -16,10 +16,10 @@ fun InstructionsDialog(visible: Boolean, onDismiss: () -> Unit) {
                 Text(text = stringResource(id = R.string.ui_instructions_title))
             },
             text = {
-                Text(text = stringResource(id = R.string.ui_instructions_body, stringResource(id = R.string.ui_buttons_next_pairing)))
+                Text(text = stringResource(id = R.string.ui_instructions_body))
             },
             confirmButton = {
-                TextButton(
+                Button(
                     onClick = {
                         onDismiss()
                     }

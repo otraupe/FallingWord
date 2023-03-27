@@ -1,6 +1,6 @@
 package com.otraupe.fallingwords.ui.main
 
-import android.os.CountDownTimer
+import android.os.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -21,55 +21,73 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.otraupe.fallingwords.R
+import com.otraupe.fallingwords.data.model.response.ResponseType
+import com.otraupe.fallingwords.ui.dialog.InstructionsDialog
+import com.otraupe.fallingwords.ui.main.viewmodel.MainViewModel
 import com.otraupe.fallingwords.ui.theme.*
-import kotlin.math.ceil
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainComposable() {
     val viewModel: MainViewModel = viewModel()
-    val uiState by viewModel.uiState.observeAsState()
 
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    val started = rememberSaveable { mutableStateOf(false) }
     var showInstructionsDialog by rememberSaveable { mutableStateOf(false) }
 
+    val uiState by viewModel.uiState.observeAsState()
+    val totalScore by viewModel.scoreFlow.collectAsState()
+
     val density = LocalDensity.current
-    val context = LocalContext.current
-    val timerDurationMillis =
-        context.resources.getInteger(R.integer.default_pairings_countdown_millis).toLong()
+    val timerDurationMillis = context.resources.getInteger(R.integer.default_pairings_countdown_millis).toLong()
 
-    // TODO: animate timer (AnimateContent)
-
+    var targetWord by rememberSaveable { mutableStateOf(context.resources.getString(R.string.ui_press_start)) }
     var currentTranslation by rememberSaveable { mutableStateOf("") }
-    var fallingWordVisible by rememberSaveable { mutableStateOf(false) }
-
-    var playingFieldHeightPx by remember { mutableStateOf(0f) }
-    var fallingWordVerticalOffset by remember { mutableStateOf(0) }
 
     val fallingWordHeightDp = 48.dp
     val fallingWordHeightPx = with(density) { fallingWordHeightDp.toPx() }
+    var playingFieldHeightPx by remember { mutableStateOf(0f) }
+    var fallingWordVerticalOffset by remember { mutableStateOf(0) }
+    var fallingWordVisible by rememberSaveable { mutableStateOf(false) }
 
-    var countDownValue by rememberSaveable { mutableStateOf(timerDurationMillis/1000) }
+    val defaultTextSize = 32.dp
+
+    //region Timer and trial start
+    var countDownValue by rememberSaveable { mutableStateOf(timerDurationMillis) }
     val countDownTimer = object : CountDownTimer(timerDurationMillis, 10) {
         override fun onTick(millisUntilFinished: Long) {
-            countDownValue = ceil(millisUntilFinished.toDouble()/1000).toLong()
+            countDownValue = millisUntilFinished
             val fractionLeft = millisUntilFinished.toFloat()/timerDurationMillis
             fallingWordVerticalOffset = - ((playingFieldHeightPx - fallingWordHeightPx) * fractionLeft).toInt()
+            if (!fallingWordVisible) {  // cancel does not work from different thread, it seems
+                cancel()
+            }
         }
         override fun onFinish() {
-            countDownValue = 0
+            countDownValue = 0  // last tick is > 0
             fallingWordVisible = false
+            viewModel.response(ResponseType.ELAPSED, 0)
         }
     }
     DisposableEffect(key1 = uiState) {
+        targetWord = uiState?.currentPairing?.text_eng ?: context.resources.getString(R.string.ui_press_start)
         val translatedWord = uiState?.currentPairing?.text_spa
-        if (translatedWord != null) {
-            currentTranslation = translatedWord
-            fallingWordVisible = true
-            countDownTimer.start()
+        if (!translatedWord.isNullOrBlank()) {
+            scope.launch {
+                delay(1000)
+                currentTranslation = translatedWord
+                fallingWordVisible = true
+                countDownTimer.start()
+            }
         }
         onDispose {
-            countDownTimer.cancel()
+            fallingWordVisible = false
         }
     }
+    //endregion
 
     Column(
         modifier = Modifier
@@ -82,28 +100,34 @@ fun MainComposable() {
                     )
                 )
             ),
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        //region Timer
+        //region Total Score
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(32.dp),
-            text = countDownValue.toString(),
+            text = stringResource(id = R.string.ui_label_Score, totalScore),
+            color = ColorTextDefault,
             textAlign = TextAlign.Center,
-            fontSize = 32.sp
+            fontSize = with(density) { defaultTextSize.toSp() }
         )
         //endregion
 
         //region Target word
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 32.dp),
-            text = uiState?.currentPairing?.text_eng ?: "",
-            textAlign = TextAlign.Center,
-            fontSize = 32.sp
+        TargetWord(height = fallingWordHeightDp, word = targetWord)
+        //endregion
+
+        //region Timer/Score
+        TimerAndScoreDisplay(
+            viewModel = viewModel,
+            started = started,
+            fallingWordVisible = fallingWordVisible,
+            countDownValue = countDownValue,
+            defaultTextSize = defaultTextSize,
+            coroutineScope = scope
         )
         //endregion
 
@@ -122,11 +146,19 @@ fun MainComposable() {
                 word = currentTranslation,
                 visible = fallingWordVisible,
                 height = fallingWordHeightDp,
-                verticalOffsetPx = fallingWordVerticalOffset
+                verticalOffsetPx = fallingWordVerticalOffset,
+                onResponseWrong = {
+                    fallingWordVisible = false
+                    viewModel.response(ResponseType.WRONG, countDownValue)
+                },
+                onResponseCorrect = {
+                    fallingWordVisible = false
+                    viewModel.response(ResponseType.CORRECT, countDownValue)
+                }
             )
         }
 
-        //region bottom end of playing field
+        //region bottom delimiter
         Box(
             modifier = Modifier
                 .padding(horizontal = 48.dp)
@@ -149,11 +181,25 @@ fun MainComposable() {
         //region Buttons
         Button(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 64.dp, vertical = 32.dp),
-            onClick = { viewModel.getNextPairing() }
+                .width(180.dp)
+                .padding(vertical = 32.dp),
+            onClick = {
+                if (started.value) {
+                    fallingWordVisible = false
+                    started.value = false
+                    viewModel.resetScore()
+                    targetWord = context.resources.getString(R.string.ui_press_start)
+                } else {
+                    started.value = true
+                    viewModel.nextPairing()
+                }
+            }
         ) {
-            Text(text = stringResource(id = R.string.ui_buttons_next_pairing))
+            Text(
+                text = if (started.value) stringResource(id = R.string.ui_buttons_stop)
+                else stringResource(id = R.string.ui_buttons_next_pairing),
+                fontSize = 18.sp
+            )
         }
         //endregion
 

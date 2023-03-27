@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="default_pairings_countdown_millis">5000</integer>
+    <integer name="default_pairings_countdown_millis">3000</integer>
+    <integer name="default_response_feedback_millis">2000</integer>
 </resources>

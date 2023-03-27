@@ -5,10 +5,14 @@
     <string name="app_pairings_assets_illegal_format">Could not properly parse local pairings file, exiting</string>
 
     <string name="ui_instructions_title">Instructions</string>
-    <string name="ui_instructions_body">Swipe the falling word to the left (correct translation) or to the right (incorrect translation).\n\nPress \"%1$s\" to begin.</string>
+    <string name="ui_instructions_body">Swipe the Falling Word to the RIGHT (correct translation) or to the LEFT (incorrect translation).</string>
     <string name="ui_instructions_ok">OK</string>
 
-    <string name="ui_buttons_next_pairing">Next Word</string>
+    <string name="ui_label_Score">Score: %1$d</string>
+    <string name="ui_press_start">Press Start</string>
+
+    <string name="ui_buttons_next_pairing">Start</string>
+    <string name="ui_buttons_stop">Stop</string>
 
     <string name="ui_answer_correct">Correct</string>
     <string name="ui_answer_incorrect">Wrong</string>

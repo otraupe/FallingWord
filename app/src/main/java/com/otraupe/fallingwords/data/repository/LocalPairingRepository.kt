@@ -6,13 +6,12 @@ import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import com.otraupe.fallingwords.R
-import com.otraupe.fallingwords.data.model.Pairing
+import com.otraupe.fallingwords.data.model.pairing.Pairing
 import com.otraupe.fallingwords.util.JsonUtils
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.lang.reflect.Type
 import javax.inject.Inject
 import kotlin.random.Random
-
 
 const val PAIRINGS_FILE = "words.json"
 
