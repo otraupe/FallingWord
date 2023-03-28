@@ -18,6 +18,7 @@ The app is written in Kotlin following Clean architecture principles (organizing
 The code challenge included a coding time target of 4h with a hard max. of 8h. As tasks such as retrieving the vocabulary data via REST calls is trivial, the emphasis of the development lay on the UI and gamification side. The goal was to create something usable while being at least a little bit fun. This app was developed in close to 8h.
 
 There are many areas of improvement for future development, such as (in no particular order):
+- use an alternative to SwipeToDismiss as it does not seem to play overly well with AnimatedVisibility
 - prepare the app to deal with different languages
 - implement a proper local and remote data sources
 - REST calls for remote data
