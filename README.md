@@ -1,5 +1,5 @@
 # FallingWord
-Small language learning Android app gamificating vocabulary training
+Small language learning Android app gamifying vocabulary training
 
 ## What FallingWord does
 This app was created for a code challenge. It is a small game for vocabulary training. It displays an English word together with a Spanish word "falling" down the screen. The falling animation represents a timer running out. The Spanish word may or may not be the correct translation. The user decides on its correctness by swiping it off the screen either to the right (correct) or to the left (incorrect). The remaining timer milliseconds are counted as score or penalty depending on the response being correct. The timer running out also incurs a slight penalty.
