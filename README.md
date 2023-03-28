@@ -7,7 +7,7 @@ This app was created for a code challenge. It is a small game for vocabulary tra
 This way the app encourages to answer while training the user to balance response speed and correctness. The next trial is started automatically imposing a constant time pressure supposed to resemble a real language using scenario.
 
 ## Tech stack
-The app is written in Kotlin following Clean architecture principles (organizing the code base into data, domain, and ui packages) and using the MVVM architecture pattern. I further uses:
+The app is written in Kotlin following Clean architecture principles (organizing the code base into data, domain, and ui packages) and using the MVVM architecture pattern. It further uses:
 
 - [Jetpack Compose](https://developer.android.com/jetpack/compose) for creating the UI
 - [LiveData](https://developer.android.com/topic/libraries/architecture/livedata) for updating the UI
@@ -35,7 +35,7 @@ There are many areas of improvement for future development, such as (in no parti
 - prevent repetition of same words
 - define an end of the game (training session length; or just display all words of a certain category)
 - make the app survive configuration changes
-- develop an audio Version for the hearing impaired
+- develop an audio version for the hearing impaired
 - improve text scaling (target word, falling word)
 - fix a bug: sometimes the score animation is not shown completely
 - fix a bug: clicking the start button quickly breaks the UI
