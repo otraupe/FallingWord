@@ -38,8 +38,8 @@ fun MainComposable() {
     val started = rememberSaveable { mutableStateOf(false) }
     var showInstructionsDialog by rememberSaveable { mutableStateOf(false) }
 
-    val uiState by viewModel.uiState.observeAsState()
-    val totalScore by viewModel.scoreFlow.collectAsState()
+    val uiState by viewModel.uiStateLiveData.observeAsState()
+    val totalScore by viewModel.scoreLiveData.observeAsState()
 
     val density = LocalDensity.current
     val timerDurationMillis = context.resources.getInteger(R.integer.default_pairings_countdown_millis).toLong()
@@ -109,7 +109,7 @@ fun MainComposable() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(32.dp),
-            text = stringResource(id = R.string.ui_label_Score, totalScore),
+            text = stringResource(id = R.string.ui_label_Score, totalScore ?: 0L),
             color = ColorTextDefault,
             textAlign = TextAlign.Center,
             fontSize = with(density) { defaultTextSize.toSp() }

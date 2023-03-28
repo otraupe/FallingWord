@@ -36,7 +36,7 @@ fun ScoreText(
             true -> visibleColor
         },
         animationSpec = tween(
-            durationMillis = animationDuration*2,   // somehow runs at double speed
+            durationMillis = animationDuration,
             delayMillis = 0,
             easing = LinearOutSlowInEasing
         ),
@@ -48,7 +48,7 @@ fun ScoreText(
             true -> 64.dp
         },
         animationSpec = tween(
-            durationMillis = animationDuration*2,
+            durationMillis = animationDuration,
             delayMillis = 0,
             easing = LinearOutSlowInEasing
         )

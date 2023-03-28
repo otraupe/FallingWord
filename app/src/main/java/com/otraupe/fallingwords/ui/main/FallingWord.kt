@@ -50,8 +50,11 @@ fun FallingWord(
     var textStyle by remember { mutableStateOf(textStyleBodyLarge.copy(fontSize = defaultFontSize)) }
     var readyToDraw by remember { mutableStateOf(false) }
 
-    val animSpecFade: FiniteAnimationSpec<Float> = keyframes {
+    val animSpecFadeIn: FiniteAnimationSpec<Float> = keyframes {
         this.durationMillis = 200
+    }
+    val animSpecFadeOut: FiniteAnimationSpec<Float> = keyframes {
+        this.durationMillis = 500
     }
 
     //region Dismiss state
@@ -92,11 +95,11 @@ fun FallingWord(
             .offset { IntOffset(0, verticalOffsetPx) },
         visible = visible,
         enter = fadeIn(
-            animationSpec = animSpecFade,
+            animationSpec = animSpecFadeIn,
             initialAlpha = 0.0f
         ),
         exit = fadeOut(
-            animationSpec = animSpecFade,
+            animationSpec = animSpecFadeOut,
             targetAlpha = 0.0f
         )
     ) {

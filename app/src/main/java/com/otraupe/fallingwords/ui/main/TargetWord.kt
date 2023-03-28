@@ -34,7 +34,7 @@ fun TargetWord(height: Dp, word: String) {
     var zIndexA by rememberSaveable { mutableStateOf(-1f) }
     var zIndexb by rememberSaveable { mutableStateOf(-1f) }
 
-    val animSpecFade: FiniteAnimationSpec<Float> = tween(750)
+    val animSpecFade: FiniteAnimationSpec<Float> = tween(500)
 
     Box(modifier = Modifier
         .fillMaxWidth()
